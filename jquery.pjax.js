@@ -265,7 +265,16 @@ function pjax(options) {
     document.activeElement.blur()
 
     if (container.title) document.title = container.title
-    context.html(container.contents)
+
+      var specialy_targeted = $('[data-pjax-target]', container.contents);
+      if (specialy_targeted.length) {
+          specialy_targeted.each(function(index, element) {
+              var $this = $(element);
+              $(context).find($this.data("pjaxTarget")).first().html($this.children());
+          });
+      } else {
+          context.html(container.contents)
+      }
 
     // FF bug: Won't autofocus fields that are inserted via JS.
     // This behavior is incorrect. So if theres no current focus, autofocus
